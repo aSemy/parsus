@@ -1,5 +1,3 @@
-import buildsrc.utils.nativeTarget
-
 plugins {
     buildsrc.conventions.`kotlin-multiplatform-base`
 }
@@ -12,7 +10,10 @@ kotlin {
         nodejs()
     }
 
-    nativeTarget()
+    linuxX64()
+    macosX64()
+    macosArm64()
+    mingwX64()
 
     sourceSets {
         commonMain {
