@@ -12,6 +12,15 @@ version = publishVersion
 
 kotlin {
     sourceSets {
+        commonMain {
+            dependencies {
+                implementation("org.jetbrains:annotations") {
+                    version {
+                        strictly("25.0.0")
+                    }
+                }
+            }
+        }
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
@@ -60,7 +69,7 @@ tasks.register<GenerateQuickReferenceMarkdown>("generateQuickRef") {
     markdownOutput = project.layout.buildDirectory.file("quickref.md")
 }
 
-tasks.register("checkQuickRefInReadme") {
+val checkQuickRefInReadme by tasks.registering {
     dependsOn("generateQuickRef")
     val generatedQuickRef = project.layout.buildDirectory.file("quickref.md")
     val readme = project.layout.projectDirectory.file("README.md")
@@ -75,6 +84,12 @@ tasks.register("checkQuickRefInReadme") {
     }
 }
 
-tasks.named("check") {
-    dependsOn("checkQuickRefInReadme")
+tasks.check {
+    dependsOn(checkQuickRefInReadme)
+}
+
+plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin>().configureEach {
+    extensions.configure<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension> {
+        yarnLockMismatchReport = org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport.NONE
+    }
 }

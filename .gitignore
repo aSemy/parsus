@@ -8,6 +8,9 @@ build
 *.iml
 out
 
+# Kotlin
+.kotlin/
+
 # Platform-specific
 # MacOS
 .DS_Store
